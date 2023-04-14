@@ -2,6 +2,7 @@ package ru.taratonov.shoppingcart.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.taratonov.shoppingcart.enumerations.OrderStatus;
 import ru.taratonov.shoppingcart.enumerations.PaymentMethod;
 
@@ -21,6 +22,8 @@ public class Order {
     private int id;
 
     @Column(name = "order_date")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @NonNull
     private Date orderDate;
 
