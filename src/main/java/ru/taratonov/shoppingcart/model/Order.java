@@ -1,5 +1,7 @@
 package ru.taratonov.shoppingcart.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "\"Order\"")
+@Table(name = "Orders")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,8 +41,10 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    @JsonBackReference
     private Customer customer;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order",fetch =FetchType.EAGER)
+    @JsonManagedReference
     private List<OrderDetail> orderDetailList;
 }

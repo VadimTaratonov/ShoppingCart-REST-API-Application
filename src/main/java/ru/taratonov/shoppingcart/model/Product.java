@@ -1,5 +1,6 @@
 package ru.taratonov.shoppingcart.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +10,7 @@ import java.util.List;
 @Table(name = "Product")
 @Data
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class Product {
     @Id
     @Column(name = "id")
@@ -28,6 +29,7 @@ public class Product {
     @Column(name = "in_stock")
     private boolean inStock;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<OrderDetail> orderDetailList;
 }
