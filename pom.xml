@@ -15,18 +15,30 @@
 	<description>ShoppingCart</description>
 	<properties>
 		<java.version>17</java.version>
+		<mapstruct.version>1.5.4.Final</mapstruct.version>
 	</properties>
 	<dependencies>
+
+		<!-- Стартер для использования Spring Data Jpa с  Hibernate _-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
+		<!-- Стартер для создания REST веб-приложений -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- PostgreSQL JDBC Driver Postgresql -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- Аннотации Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -39,6 +51,7 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- основной функционал Hibernate ORM -->
 		<dependency>
 			<groupId>org.hibernate.orm</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -51,7 +64,18 @@
 			<version>6.0.7</version>
 		</dependency>
 
+		<!-- Маппер -->
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${mapstruct.version}</version>
+		</dependency>
 
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${mapstruct.version}</version>
+		</dependency>
 
 	</dependencies>
 
