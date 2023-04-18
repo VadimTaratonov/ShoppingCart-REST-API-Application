@@ -20,9 +20,13 @@ public class OrderService {
     }
 
     public Order findOne(int id) {
-        Optional<Order> foundPerson = orderRepository.findById(id);
-        return foundPerson.orElseThrow(OrderNotFoundException::new);
+        Optional<Order> foundOrder = orderRepository.findById(id);
+        return foundOrder.orElseThrow(OrderNotFoundException::new);
     }
 
-
+    @Transactional
+    public void saveOrder(Order order){
+        System.out.println(order.getOrderDetailList());
+        orderRepository.save(order);
+    }
 }

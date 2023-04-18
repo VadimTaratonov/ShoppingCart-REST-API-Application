@@ -1,5 +1,6 @@
 package ru.taratonov.shoppingcart.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,7 @@ import ru.taratonov.shoppingcart.util.OrderNotFoundException;
 @RestController
 @RequestMapping("/order")
 public class OrderController {
-
     private final OrderService orderService;
-
-
     @Autowired
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
@@ -25,7 +23,15 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public OrderDTO getOrder(@PathVariable(name = "id") int id){
-        return convertToPersonDTO(orderService.findOne(id));
+        return convertToOrderDTO(orderService.findOne(id));
+    }
+
+    @PostMapping()
+    public ResponseEntity<HttpStatus> createOrder(@RequestBody @Valid OrderDTO orderDTO) {
+
+        orderService.saveOrder(convertToOrder(orderDTO));
+
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 
@@ -33,7 +39,7 @@ public class OrderController {
         return OrderMapper.ORDER_MAPPER.toOrder(orderDTO);
     }
 
-    private OrderDTO convertToPersonDTO(Order order) {
+    private OrderDTO convertToOrderDTO(Order order) {
         return OrderMapper.ORDER_MAPPER.toOrderDTO(order);
     }
 
@@ -43,5 +49,4 @@ public class OrderController {
                 ErrorResponse("Order not found");
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
-
 }

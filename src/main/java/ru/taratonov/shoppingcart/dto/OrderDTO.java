@@ -1,9 +1,11 @@
 package ru.taratonov.shoppingcart.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import ru.taratonov.shoppingcart.enumerations.OrderStatus;
 import ru.taratonov.shoppingcart.enumerations.PaymentMethod;
 import ru.taratonov.shoppingcart.model.Customer;
 import ru.taratonov.shoppingcart.model.OrderDetail;
+
 
 import java.util.Date;
 import java.util.List;
@@ -11,9 +13,9 @@ import java.util.List;
 public class OrderDTO {
     private Date orderDate;
     private OrderStatus orderStatus;
+
     private PaymentMethod paymentMethod;
     private Customer customer;
-
     private List<OrderDetail> orderDetailList;
 
     public Date getOrderDate() {
