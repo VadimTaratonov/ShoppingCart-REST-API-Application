@@ -1,6 +1,7 @@
 package ru.taratonov.shoppingcart.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,11 +25,11 @@ public class OrderDetail {
 
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonBackReference (value = "order_order_detail")
     private Order order;
 
     @ManyToOne
     @JoinColumn(name = "product_id",referencedColumnName = "id")
-    @JsonBackReference
+    @JsonBackReference (value = "product_order_detail")
     private Product product;
 }

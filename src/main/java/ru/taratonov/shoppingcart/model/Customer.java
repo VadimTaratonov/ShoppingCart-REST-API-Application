@@ -1,6 +1,7 @@
 package ru.taratonov.shoppingcart.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,8 +40,8 @@ public class Customer {
     @NonNull
     private Long phone;
 
-    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JsonManagedReference(value = "customer_order")
     private List<Order> orderList;
 
 

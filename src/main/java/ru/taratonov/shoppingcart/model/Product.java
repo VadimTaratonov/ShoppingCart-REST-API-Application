@@ -29,7 +29,7 @@ public class Product {
     @Column(name = "in_stock")
     private boolean inStock;
 
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JsonManagedReference(value = "product_order_detail")
     private List<OrderDetail> orderDetailList;
 }

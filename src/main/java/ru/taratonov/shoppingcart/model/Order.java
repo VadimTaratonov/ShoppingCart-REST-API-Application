@@ -1,6 +1,7 @@
 package ru.taratonov.shoppingcart.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,10 +42,10 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonBackReference(value = "customer_order")
     private Customer customer;
 
-    @OneToMany(mappedBy = "order",fetch =FetchType.EAGER)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JsonManagedReference(value = "order_order_detail")
     private List<OrderDetail> orderDetailList;
 }
