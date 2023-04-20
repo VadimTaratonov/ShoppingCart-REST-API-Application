@@ -29,4 +29,21 @@ public class OrderService {
         System.out.println(order.getOrderDetailList());
         orderRepository.save(order);
     }
+
+    @Transactional
+    public void updateOrder(int id, Order updatedOrder) {
+        Optional<Order> foundOrder = orderRepository.findById(id);
+        if (foundOrder.isEmpty())
+            throw new OrderNotFoundException();
+        updatedOrder.setId(id);
+        orderRepository.save(updatedOrder);
+    }
+
+    @Transactional
+    public void delete(int id) {
+        Optional<Order> foundOrder = orderRepository.findById(id);
+        if (foundOrder.isEmpty())
+            throw new OrderNotFoundException();
+        orderRepository.deleteById(id);
+    }
 }

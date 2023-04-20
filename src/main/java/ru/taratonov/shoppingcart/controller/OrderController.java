@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.taratonov.shoppingcart.dto.OrderDTO;
 import ru.taratonov.shoppingcart.mapper.OrderMapper;
@@ -31,6 +32,19 @@ public class OrderController {
 
         orderService.saveOrder(convertToOrder(orderDTO));
 
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<HttpStatus> update(@RequestBody @Valid OrderDTO orderDTO,
+                                             @PathVariable("id") int id) {
+        orderService.updateOrder(id, convertToOrder(orderDTO));
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
+        orderService.delete(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
