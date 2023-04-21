@@ -2,6 +2,7 @@ package ru.taratonov.shoppingcart.annotation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+import ru.taratonov.shoppingcart.enumerations.PaymentMethod;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -13,10 +14,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = ValueOfEnumValidator.class)
-public @interface ValueOfEnum {
-    Class<? extends Enum<?>> enumClass();
-    String message() default "must be any of enum {enumClass}";
+@Constraint(validatedBy = EnumPaymentMethodValidator.class)
+public @interface EnumPaymentMethod {
+    PaymentMethod[] anyOf();
+
+    String message() default "must be any of {anyOf}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }
