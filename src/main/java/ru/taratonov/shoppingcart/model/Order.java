@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import ru.taratonov.shoppingcart.enumerations.OrderStatus;
 import ru.taratonov.shoppingcart.enumerations.PaymentMethod;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class Order {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @NonNull
-    private Date orderDate;
+    private LocalDate orderDate;
 
     @Column(name = "order_status")
     @Enumerated(EnumType.STRING)
