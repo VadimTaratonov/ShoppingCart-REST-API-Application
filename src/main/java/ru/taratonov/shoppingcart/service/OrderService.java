@@ -36,6 +36,10 @@ public class OrderService {
         if (foundOrder.isEmpty())
             throw new OrderNotFoundException();
         updatedOrder.setId(id);
+        updatedOrder.setOrderDate(foundOrder.get().getOrderDate());
+        updatedOrder.setPaymentMethod(foundOrder.get().getPaymentMethod());
+        updatedOrder.setOrderDetailList(foundOrder.get().getOrderDetailList());
+        updatedOrder.setCustomer(foundOrder.get().getCustomer());
         orderRepository.save(updatedOrder);
     }
 
