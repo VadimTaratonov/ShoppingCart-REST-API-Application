@@ -3,7 +3,8 @@ package ru.taratonov.shoppingcart.dto;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
-import ru.taratonov.shoppingcart.annotation.ValueOfEnum;
+import ru.taratonov.shoppingcart.annotation.EnumOrderStatus;
+import ru.taratonov.shoppingcart.annotation.EnumPaymentMethod;
 import ru.taratonov.shoppingcart.enumerations.OrderStatus;
 import ru.taratonov.shoppingcart.enumerations.PaymentMethod;
 
@@ -18,11 +19,11 @@ public class OrderDTO {
     private LocalDate orderDate;
 
     @NotEmpty
-    @ValueOfEnum(enumClass = OrderStatus.class)
+    @EnumOrderStatus(anyOf = {OrderStatus.CREATED, OrderStatus.PROCESSING, OrderStatus.SHIPPED, OrderStatus.CANCELLED})
     private OrderStatus orderStatus;
 
     @NotEmpty
-    @ValueOfEnum(enumClass = PaymentMethod.class)
+    @EnumPaymentMethod(anyOf = {PaymentMethod.ON_RECEIPT, PaymentMethod.CREDIT_CARD, PaymentMethod.PAY_PAL})
     private PaymentMethod paymentMethod;
 
     @NotEmpty

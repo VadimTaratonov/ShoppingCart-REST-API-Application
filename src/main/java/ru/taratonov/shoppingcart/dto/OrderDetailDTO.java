@@ -8,11 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderDetailDTO {
-    @NotEmpty
     @Min(0)
     private int price;
 
-    @NotEmpty
     @Min(0)
     private int quantity;
 

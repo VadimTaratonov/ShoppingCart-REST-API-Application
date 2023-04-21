@@ -1,5 +1,6 @@
 package ru.taratonov.shoppingcart.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,19 +9,14 @@ import lombok.Setter;
 @Setter
 public class ProductDTO {
 
-    @NotEmpty
-    private int id;
-
-    @NotEmpty
+    @NotEmpty(message = "name of product should not be empty")
     private String name;
 
     @NotEmpty
+    @Min(0)
     private int price;
 
-    @NotEmpty
+    @NotEmpty(message = "description should not be empty")
     private String description;
-
-    @NotEmpty
-    private boolean inStock;
 
 }

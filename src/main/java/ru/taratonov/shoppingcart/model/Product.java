@@ -32,4 +32,5 @@ public class Product {
     @OneToMany(mappedBy = "product",fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JsonManagedReference(value = "product_order_detail")
     private List<OrderDetail> orderDetailList;
+
 }

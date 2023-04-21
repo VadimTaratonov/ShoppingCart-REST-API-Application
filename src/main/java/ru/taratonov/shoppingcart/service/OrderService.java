@@ -25,7 +25,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void saveOrder(Order order){
+    public void saveOrder(Order order) {
         System.out.println(order.getOrderDetailList());
         orderRepository.save(order);
     }
