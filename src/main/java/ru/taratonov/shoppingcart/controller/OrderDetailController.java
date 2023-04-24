@@ -10,8 +10,8 @@ import ru.taratonov.shoppingcart.dto.OrderDetailDTORequestCreate;
 import ru.taratonov.shoppingcart.mapper.OrderDetailMapper;
 import ru.taratonov.shoppingcart.model.OrderDetail;
 import ru.taratonov.shoppingcart.service.OrderDetailService;
-import ru.taratonov.shoppingcart.util.ErrorResponse;
 import ru.taratonov.shoppingcart.util.OrderDetailNotFoundException;
+import ru.taratonov.shoppingcart.util.OrderNotFoundException;
 import ru.taratonov.shoppingcart.util.ProductIsNotInStockException;
 
 import java.util.List;
@@ -29,13 +29,15 @@ public class OrderDetailController {
     }
 
     @GetMapping("/by_orderId")
-    public List<OrderDetailDTO> getAllByOrderId(@RequestParam(value = "orderId", required = false) int id) {
+    public List<OrderDetailDTO> getAllByOrderId(@RequestParam(value = "orderId", required = false) int id)
+            throws OrderNotFoundException {
         return orderDetailService.getAll(id).stream().map(this::convertToOrderDetailDTO).toList();
     }
 
     @PostMapping()
     public ResponseEntity<HttpStatus> createPerson(@RequestBody @Valid
-                                                   OrderDetailDTORequestCreate orderDetailDTORequestCreate) {
+                                                   OrderDetailDTORequestCreate orderDetailDTORequestCreate)
+            throws ProductIsNotInStockException {
 
         orderDetailService.saveOrderDetail(convertToOrderDetail(orderDetailDTORequestCreate));
 
@@ -43,7 +45,7 @@ public class OrderDetailController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) throws OrderDetailNotFoundException {
         orderDetailService.delete(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -54,19 +56,5 @@ public class OrderDetailController {
 
     private OrderDetailDTO convertToOrderDetailDTO(OrderDetail orderDetail) {
         return OrderDetailMapper.ORDER_DETAIL_MAPPER.toOrderDetailDTO(orderDetail);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(OrderDetailNotFoundException e) {
-        ErrorResponse response = new
-                ErrorResponse("OrderDetail not found");
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(ProductIsNotInStockException e) {
-        ErrorResponse response = new
-                ErrorResponse("This product is not in stock");
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

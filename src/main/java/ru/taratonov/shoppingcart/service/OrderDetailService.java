@@ -27,7 +27,7 @@ public class OrderDetailService {
     public List<OrderDetail> getAll(int id) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isEmpty()) {
-            throw new OrderNotFoundException();
+            throw OrderNotFoundException.createWith(id);
         }
         return optionalOrder.get().getOrderDetailList();
     }
@@ -43,17 +43,18 @@ public class OrderDetailService {
     public void saveOrderDetail(OrderDetail orderDetail) {
         Product product = orderDetail.getProduct();
         int id = product.getId();
-        boolean inStock = productRepository.findById(id).get().isInStock();
+        Product product1 = productRepository.findById(id).get();
+        boolean inStock = product1.isInStock();
         if (inStock)
             orderDetailRepository.save(orderDetail);
-        else throw new ProductIsNotInStockException();
+        else throw  ProductIsNotInStockException.createWith(product1);
     }
 
     @Transactional
     public void delete(int id) {
         Optional<OrderDetail> foundOrderDetail = orderDetailRepository.findById(id);
         if (foundOrderDetail.isEmpty())
-            throw new OrderDetailNotFoundException();
+            throw OrderDetailNotFoundException.createWith(id);
         Order order = foundOrderDetail.get().getOrder();
         List<OrderDetail> orderDetailList = order.getOrderDetailList();
         List<OrderDetail> newOrderDetailList = new ArrayList<>();

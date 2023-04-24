@@ -21,7 +21,7 @@ public class OrderService {
 
     public Order findOne(int id) {
         Optional<Order> foundOrder = orderRepository.findById(id);
-        return foundOrder.orElseThrow(OrderNotFoundException::new);
+        return foundOrder.orElseThrow(() -> OrderNotFoundException.createWith(id));
     }
 
     @Transactional
@@ -34,7 +34,7 @@ public class OrderService {
     public void updateOrder(int id, Order updatedOrder) {
         Optional<Order> foundOrder = orderRepository.findById(id);
         if (foundOrder.isEmpty())
-            throw new OrderNotFoundException();
+            throw OrderNotFoundException.createWith(id);
         updatedOrder.setId(id);
         updatedOrder.setOrderDate(foundOrder.get().getOrderDate());
         updatedOrder.setPaymentMethod(foundOrder.get().getPaymentMethod());
@@ -47,7 +47,7 @@ public class OrderService {
     public void delete(int id) {
         Optional<Order> foundOrder = orderRepository.findById(id);
         if (foundOrder.isEmpty())
-            throw new OrderNotFoundException();
+            throw OrderNotFoundException.createWith(id);
         orderRepository.deleteById(id);
     }
 }

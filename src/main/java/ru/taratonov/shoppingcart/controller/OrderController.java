@@ -11,7 +11,6 @@ import ru.taratonov.shoppingcart.dto.OrderDTORequestUpdate;
 import ru.taratonov.shoppingcart.mapper.OrderMapper;
 import ru.taratonov.shoppingcart.model.Order;
 import ru.taratonov.shoppingcart.service.OrderService;
-import ru.taratonov.shoppingcart.util.ErrorResponse;
 import ru.taratonov.shoppingcart.util.OrderNotFoundException;
 
 @RestController
@@ -25,7 +24,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public OrderDTO getOrder(@PathVariable(name = "id") int id) {
+    public OrderDTO getOrder(@PathVariable(name = "id") int id) throws OrderNotFoundException {
         return convertToOrderDTO(orderService.findOne(id));
     }
 
@@ -39,13 +38,13 @@ public class OrderController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@RequestBody @Valid OrderDTORequestUpdate orderDTORequestUpdate,
-                                             @PathVariable("id") int id) {
+                                             @PathVariable("id") int id) throws OrderNotFoundException {
         orderService.updateOrder(id, convertToOrder(orderDTORequestUpdate));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) throws OrderNotFoundException {
         orderService.delete(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -60,12 +59,5 @@ public class OrderController {
 
     private OrderDTO convertToOrderDTO(Order order) {
         return OrderMapper.ORDER_MAPPER.toOrderDTO(order);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(OrderNotFoundException e) {
-        ErrorResponse response = new
-                ErrorResponse("Order not found");
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }
