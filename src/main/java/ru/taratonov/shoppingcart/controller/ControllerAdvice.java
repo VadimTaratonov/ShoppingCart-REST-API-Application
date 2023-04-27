@@ -1,58 +1,37 @@
 package ru.taratonov.shoppingcart.controller;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.taratonov.shoppingcart.dto.ErrorDTO;
 import ru.taratonov.shoppingcart.util.OrderDetailNotFoundException;
 import ru.taratonov.shoppingcart.util.OrderNotFoundException;
 import ru.taratonov.shoppingcart.util.ProductIsNotInStockException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@org.springframework.web.bind.annotation.ControllerAdvice
+@RestControllerAdvice
 public class ControllerAdvice {
-
-    @ExceptionHandler
-            ({OrderNotFoundException.class, OrderDetailNotFoundException.class,
-                    ProductIsNotInStockException.class, Exception.class})
-    public final ResponseEntity<ErrorDTO> handleException(Exception ex) {
-
-        if (ex instanceof OrderNotFoundException) {
-            HttpStatus status = HttpStatus.NOT_FOUND;
-            OrderNotFoundException exception = (OrderNotFoundException) ex;
-            return NotFoundException(exception, status);
-        } else if (ex instanceof OrderDetailNotFoundException) {
-            HttpStatus status = HttpStatus.NOT_FOUND;
-            OrderDetailNotFoundException exception = (OrderDetailNotFoundException) ex;
-            return NotFoundException(exception, status);
-        } else if (ex instanceof ProductIsNotInStockException) {
-            HttpStatus status = HttpStatus.NOT_FOUND;
-            ProductIsNotInStockException exception = (ProductIsNotInStockException) ex;
-            return NotFoundException(exception, status);
-        } else {
-            return otherException(ex);
-        }
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({OrderNotFoundException.class, OrderDetailNotFoundException.class,
+            ProductIsNotInStockException.class})
+    public ErrorDTO handleNotFoundException(Exception ex) {
+        return new ErrorDTO(ex.getMessage(), LocalDateTime.now(), HttpStatus.NOT_FOUND);
     }
 
-    protected ResponseEntity<ErrorDTO> NotFoundException(OrderNotFoundException ex, HttpStatus status) {
-        ErrorDTO error = new ErrorDTO(ex.getMessage(), LocalDateTime.now(), status);
-        return new ResponseEntity<>(error, status);
-    }
-
-    protected ResponseEntity<ErrorDTO> NotFoundException(OrderDetailNotFoundException ex, HttpStatus status) {
-        ErrorDTO error = new ErrorDTO(ex.getMessage(), LocalDateTime.now(), status);
-        return new ResponseEntity<>(error, status);
-    }
-
-    protected ResponseEntity<ErrorDTO> NotFoundException(ProductIsNotInStockException ex, HttpStatus status) {
-        ErrorDTO error = new ErrorDTO(ex.getMessage(), LocalDateTime.now(), status);
-        return new ResponseEntity<>(error, status);
-    }
-
-    protected ResponseEntity<ErrorDTO> otherException(Exception ex) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        ErrorDTO error = new ErrorDTO(ex.getMessage(), LocalDateTime.now(), status);
-        return new ResponseEntity<>(error, status);
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected List<ErrorDTO> otherException(MethodArgumentNotValidException ex) {
+        List<ErrorDTO> errors = new ArrayList<>();
+        ex.getBindingResult().getFieldErrors().forEach(e ->
+                errors.add(new ErrorDTO(e.getDefaultMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST)));
+        return errors;
     }
 }

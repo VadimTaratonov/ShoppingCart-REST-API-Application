@@ -13,6 +13,6 @@ public class OrderDTORequestCreate {
     @EnumPaymentMethod(anyOf = {PaymentMethod.ON_RECEIPT, PaymentMethod.CREDIT_CARD, PaymentMethod.PAY_PAL})
     private PaymentMethod paymentMethod;
 
-    @Min(1)
+    @Min(value = 1, message = "id should be greater than 0")
     private int customerId;
 }
