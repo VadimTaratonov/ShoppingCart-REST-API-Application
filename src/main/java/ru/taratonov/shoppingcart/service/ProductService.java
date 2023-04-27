@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.taratonov.shoppingcart.model.Product;
 import ru.taratonov.shoppingcart.repository.ProductRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,11 +18,6 @@ public class ProductService {
     }
 
     public List<Product> getAllAvailableProducts() {
-        List<Product> all = productRepository.findAll();
-        List<Product> newList = new ArrayList<>();
-        for (Product pr : all)
-            if (pr.isInStock())
-                newList.add(pr);
-        return newList;
+        return productRepository.findAllByInStock(true);
     }
 }

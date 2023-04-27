@@ -1,4 +1,4 @@
-package ru.taratonov.shoppingcart.util;
+package ru.taratonov.shoppingcart.exception;
 
 public class OrderNotFoundException extends RuntimeException {
     private int id;

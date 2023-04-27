@@ -18,7 +18,7 @@ import ru.taratonov.shoppingcart.dto.OrderDTORequestUpdate;
 import ru.taratonov.shoppingcart.mapper.OrderMapper;
 import ru.taratonov.shoppingcart.model.Order;
 import ru.taratonov.shoppingcart.service.OrderService;
-import ru.taratonov.shoppingcart.util.OrderNotFoundException;
+import ru.taratonov.shoppingcart.exception.OrderNotFoundException;
 
 
 @RestController

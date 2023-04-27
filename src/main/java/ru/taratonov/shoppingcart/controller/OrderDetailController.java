@@ -17,9 +17,9 @@ import ru.taratonov.shoppingcart.dto.OrderDetailDTORequestCreate;
 import ru.taratonov.shoppingcart.mapper.OrderDetailMapper;
 import ru.taratonov.shoppingcart.model.OrderDetail;
 import ru.taratonov.shoppingcart.service.OrderDetailService;
-import ru.taratonov.shoppingcart.util.OrderDetailNotFoundException;
-import ru.taratonov.shoppingcart.util.OrderNotFoundException;
-import ru.taratonov.shoppingcart.util.ProductIsNotInStockException;
+import ru.taratonov.shoppingcart.exception.OrderDetailNotFoundException;
+import ru.taratonov.shoppingcart.exception.OrderNotFoundException;
+import ru.taratonov.shoppingcart.exception.ProductIsNotInStockException;
 
 import java.util.List;
 

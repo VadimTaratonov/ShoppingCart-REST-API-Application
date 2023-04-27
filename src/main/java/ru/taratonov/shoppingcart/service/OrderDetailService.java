@@ -9,11 +9,10 @@ import ru.taratonov.shoppingcart.model.Product;
 import ru.taratonov.shoppingcart.repository.OrderDetailRepository;
 import ru.taratonov.shoppingcart.repository.OrderRepository;
 import ru.taratonov.shoppingcart.repository.ProductRepository;
-import ru.taratonov.shoppingcart.util.OrderDetailNotFoundException;
-import ru.taratonov.shoppingcart.util.OrderNotFoundException;
-import ru.taratonov.shoppingcart.util.ProductIsNotInStockException;
+import ru.taratonov.shoppingcart.exception.OrderDetailNotFoundException;
+import ru.taratonov.shoppingcart.exception.OrderNotFoundException;
+import ru.taratonov.shoppingcart.exception.ProductIsNotInStockException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +23,13 @@ public class OrderDetailService {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
 
+    @Autowired
+    public OrderDetailService(OrderDetailRepository orderDetailRepository, ProductRepository productRepository, OrderRepository orderRepository) {
+        this.orderDetailRepository = orderDetailRepository;
+        this.productRepository = productRepository;
+        this.orderRepository = orderRepository;
+    }
+
     public List<OrderDetail> getAll(int id) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
         if (optionalOrder.isEmpty()) {
@@ -32,36 +38,25 @@ public class OrderDetailService {
         return optionalOrder.get().getOrderDetailList();
     }
 
-    @Autowired
-    public OrderDetailService(OrderDetailRepository orderDetailRepository, ProductRepository productRepository, OrderRepository orderRepository) {
-        this.orderDetailRepository = orderDetailRepository;
-        this.productRepository = productRepository;
-        this.orderRepository = orderRepository;
-    }
-
     @Transactional
     public void saveOrderDetail(OrderDetail orderDetail) {
         Product product = orderDetail.getProduct();
         int id = product.getId();
-        Product product1 = productRepository.findById(id).get();
-        boolean inStock = product1.isInStock();
-        if (inStock)
+        Product realProductWithIdInDb = productRepository.findById(id).get();
+        boolean inStock = realProductWithIdInDb.isInStock();
+        if (inStock) {
             orderDetailRepository.save(orderDetail);
-        else throw  ProductIsNotInStockException.createWith(product1);
+        } else throw ProductIsNotInStockException.createWith(realProductWithIdInDb);
     }
 
     @Transactional
     public void delete(int id) {
         Optional<OrderDetail> foundOrderDetail = orderDetailRepository.findById(id);
-        if (foundOrderDetail.isEmpty())
+        if (foundOrderDetail.isEmpty()) {
             throw OrderDetailNotFoundException.createWith(id);
+        }
         Order order = foundOrderDetail.get().getOrder();
-        List<OrderDetail> orderDetailList = order.getOrderDetailList();
-        List<OrderDetail> newOrderDetailList = new ArrayList<>();
-        for (OrderDetail od : orderDetailList)
-            if (!od.equals(foundOrderDetail.get()))
-                newOrderDetailList.add(od);
-        order.setOrderDetailList(newOrderDetailList);
+        order.setOrderDetailList(order.getOrderDetailList().stream().filter(dl -> !dl.equals(foundOrderDetail.get())).toList());
         orderDetailRepository.deleteById(id);
     }
 }

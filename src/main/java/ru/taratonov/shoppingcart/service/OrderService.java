@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.taratonov.shoppingcart.model.Order;
 import ru.taratonov.shoppingcart.repository.OrderRepository;
-import ru.taratonov.shoppingcart.util.OrderNotFoundException;
+import ru.taratonov.shoppingcart.exception.OrderNotFoundException;
 
 import java.util.Optional;
 
@@ -20,21 +20,20 @@ public class OrderService {
     }
 
     public Order findOne(int id) {
-        Optional<Order> foundOrder = orderRepository.findById(id);
-        return foundOrder.orElseThrow(() -> OrderNotFoundException.createWith(id));
+        return orderRepository.findById(id).orElseThrow(() -> OrderNotFoundException.createWith(id));
     }
 
     @Transactional
     public void saveOrder(Order order) {
-        System.out.println(order.getOrderDetailList());
         orderRepository.save(order);
     }
 
     @Transactional
     public void updateOrder(int id, Order updatedOrder) {
         Optional<Order> foundOrder = orderRepository.findById(id);
-        if (foundOrder.isEmpty())
+        if (foundOrder.isEmpty()) {
             throw OrderNotFoundException.createWith(id);
+        }
         updatedOrder.setId(id);
         updatedOrder.setOrderDate(foundOrder.get().getOrderDate());
         updatedOrder.setPaymentMethod(foundOrder.get().getPaymentMethod());
@@ -46,8 +45,9 @@ public class OrderService {
     @Transactional
     public void delete(int id) {
         Optional<Order> foundOrder = orderRepository.findById(id);
-        if (foundOrder.isEmpty())
+        if (foundOrder.isEmpty()) {
             throw OrderNotFoundException.createWith(id);
+        }
         orderRepository.deleteById(id);
     }
 }

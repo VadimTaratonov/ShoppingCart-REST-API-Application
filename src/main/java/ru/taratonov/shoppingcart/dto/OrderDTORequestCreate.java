@@ -1,5 +1,6 @@
 package ru.taratonov.shoppingcart.dto;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,6 @@ public class OrderDTORequestCreate {
     @EnumPaymentMethod(anyOf = {PaymentMethod.ON_RECEIPT, PaymentMethod.CREDIT_CARD, PaymentMethod.PAY_PAL})
     private PaymentMethod paymentMethod;
 
-    @Min(value = 1, message = "id should be greater than 0")
+    @Min(value = 1)
     private int customerId;
 }

@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.taratonov.shoppingcart.dto.ErrorDTO;
-import ru.taratonov.shoppingcart.util.OrderDetailNotFoundException;
-import ru.taratonov.shoppingcart.util.OrderNotFoundException;
-import ru.taratonov.shoppingcart.util.ProductIsNotInStockException;
+import ru.taratonov.shoppingcart.exception.OrderDetailNotFoundException;
+import ru.taratonov.shoppingcart.exception.OrderNotFoundException;
+import ru.taratonov.shoppingcart.exception.ProductIsNotInStockException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class ControllerAdvice {
     protected List<ErrorDTO> otherException(MethodArgumentNotValidException ex) {
         List<ErrorDTO> errors = new ArrayList<>();
         ex.getBindingResult().getFieldErrors().forEach(e ->
-                errors.add(new ErrorDTO(e.getDefaultMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST)));
+                errors.add(new ErrorDTO(e.getField() + " " + e.getDefaultMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST)));
         return errors;
     }
 }

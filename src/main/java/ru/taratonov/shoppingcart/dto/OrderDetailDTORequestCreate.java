@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderDetailDTORequestCreate {
 
-    @Min(0)
+    @Min(1)
     private int price;
 
-    @Min(0)
+    @Min(1)
     private int quantity;
 
     @Min(1)

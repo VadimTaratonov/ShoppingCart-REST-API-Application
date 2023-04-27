@@ -1,4 +1,4 @@
-package ru.taratonov.shoppingcart.util;
+package ru.taratonov.shoppingcart.exception;
 
 import ru.taratonov.shoppingcart.model.Product;
 

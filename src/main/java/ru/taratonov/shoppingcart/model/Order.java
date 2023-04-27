@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.taratonov.shoppingcart.enumerations.OrderStatus;
 import ru.taratonov.shoppingcart.enumerations.PaymentMethod;
