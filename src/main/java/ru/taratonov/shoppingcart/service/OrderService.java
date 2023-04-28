@@ -3,9 +3,9 @@ package ru.taratonov.shoppingcart.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.taratonov.shoppingcart.exception.OrderNotFoundException;
 import ru.taratonov.shoppingcart.model.Order;
 import ru.taratonov.shoppingcart.repository.OrderRepository;
-import ru.taratonov.shoppingcart.exception.OrderNotFoundException;
 
 import java.util.Optional;
 
